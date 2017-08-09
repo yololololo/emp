@@ -1,0 +1,20 @@
+<?php
+require_once('db.php');
+require_once('checkUser.class.php');
+$user=$_POST['user'];
+$pass=$_POST['pass'];
+//如果POST过来的cookie不为空，则设置cookie
+if(!empty($_POST['cookie'])){
+	setcookie('user',$user,time()+3600);
+	setcookie('pass',$pass,time()+3600);
+}
+$a=new checkUser();
+if($id=$a->check($user,$pass)){
+	session_start();
+	$_SESSION['id']=$id;
+	header("location:main.php?user=$user");
+	exit();
+}else{
+	header("location:login.php?errno=2");
+	exit();
+}
